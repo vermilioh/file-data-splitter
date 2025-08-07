@@ -1,6 +1,7 @@
 package util;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ParsedArguments {
@@ -14,7 +15,15 @@ public class ParsedArguments {
     private String prefix = "";
 
 
-
+//    public void printParsedArguments(){
+//        System.out.println(appendToFile);
+//        System.out.println(shortStats);
+//        System.out.println(fullStats);
+//
+//        for (String inputFile : inputFiles) {
+//            System.out.println(inputFile);
+//        }
+//    }
 
     public boolean isAppendToFile() {
         return appendToFile;

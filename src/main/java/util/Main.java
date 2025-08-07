@@ -6,11 +6,16 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         if (args.length == 0) {
-            // в дальнейшем обработать как исключение?
             System.out.println("нет входных файлов");
-            return;
-        }
+            //TODO: в дальнейшем обработать как исключение?
+        } else {
+            ArgumentsParser parser = new ArgumentsParser();
+            ParsedArguments parsed = parser.parse(args); // парсер раскидал CLI по полям parsed
+
+            FileDataClassifier file1 = new FileDataClassifier();
+            file1.readInputFiles(parsed);
 
         }
     }
+}
 

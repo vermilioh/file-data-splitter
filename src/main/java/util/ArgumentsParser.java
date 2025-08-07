@@ -25,13 +25,19 @@ public class ArgumentsParser {
                     break;
 
                 case "-o":
-                    //TODO: добавить проверку на OutOfBoundaries
-                    parsedArguments.setOutputPath(args[++i]);
+                    if ((i + 1) >= args.length) {
+                        System.out.println("Error!: Укажите путь для сохранения файла");
+                    } else {
+                        parsedArguments.setOutputPath(args[++i]);
+                    }
                     break;
 
                 case "-p":
-                    //TODO: добавить проверку на OutOfBoundaries
-                    parsedArguments.setPrefix(args[++i]);
+                    if ((i + 1) >= args.length) {
+                        System.out.println("Error!: Укажите префикс");
+                    } else {
+                        parsedArguments.setPrefix(args[++i]);
+                    }
                     break;
 
                 default:
