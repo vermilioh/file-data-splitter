@@ -11,11 +11,9 @@ public class Main {
         } else {
             ArgumentsParser parser = new ArgumentsParser();
             ParsedArguments parsed = parser.parse(args); // парсер раскидал CLI по полям parsed
-
             FileDataClassifier classifier = new FileDataClassifier(parsed);
-            classifier.readInputFiles();
-
-
+            classifier.readInputFiles(); // читаем переданные файлы
+            // TODO: создать класс FileDataWriter, в который передаем 4 параметра
         }
     }
 }
