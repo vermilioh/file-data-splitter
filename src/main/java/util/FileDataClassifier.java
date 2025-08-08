@@ -10,7 +10,11 @@ public class FileDataClassifier {
 
     ParsedArguments arguments = new ParsedArguments();
 
-    public void readInputFiles(ParsedArguments files){
+    public FileDataClassifier(ParsedArguments arguments){
+        this.arguments = arguments;
+    } // конструктор
+
+    public void readInputFiles(){
 
     }
 
