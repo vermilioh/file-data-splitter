@@ -12,8 +12,9 @@ public class Main {
             ArgumentsParser parser = new ArgumentsParser();
             ParsedArguments parsed = parser.parse(args); // парсер раскидал CLI по полям parsed
 
-            FileDataClassifier file1 = new FileDataClassifier();
-            file1.readInputFiles(parsed);
+            FileDataClassifier classifier = new FileDataClassifier(parsed);
+            classifier.readInputFiles();
+
 
         }
     }
