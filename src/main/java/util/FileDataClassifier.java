@@ -1,12 +1,15 @@
 package util;
 
+import java.io.FileNotFoundException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class FileDataClassifier {
-    List<Long> integers = new ArrayList<>();
-    List<Double> floats = new ArrayList<>();
+    List<String> integers = new ArrayList<>();
+    List<String> floats = new ArrayList<>();
     List<String> strings = new ArrayList<>();
 
     ParsedArguments arguments;
@@ -17,43 +20,54 @@ public class FileDataClassifier {
 
     public void readInputFiles() {
         List<String> files = arguments.getInputFiles(); // получили пути ко Всем записанным файлам
-        // 1. Запускаем цикл по каждому пути из files:
-        //    - проверяем, существует ли файл (Files.exists(Path))
-        //    - если не существует: сообщение в консоль и continue
-        //    - если существует: вызвать приватный метод readSingleFile(Path filePath)
 
-        // readSingleFile:
-        //    - открываем файл (Scanner или BufferedReader)
-        //    - читаем построчно (while/for)
-        //    - для каждой строки вызываем getTypeOfString(line), который
-        //      вернёт enum (INTEGER, FLOAT, STRING) или символ ('I', 'F', 'S')
-        //    - в зависимости от результата — добавляем в соответствующий список:
-        //      integers, floats или strings
-
-        // 2. После обработки всех файлов:
-        //    - если включена статистика (shortStats или fullStats):
-        //      вызвать calculateStats() — он посчитает и сразу выведет, или вернёт объект со значениями
-
-        // TODO: если включена статистика: вызвать calculateStats() после цикла
-        // TODO: создать и реализовать readSingleFile(Path filePath)
-        // TODO: создать и реализовать getTypeOfString(line)
+        for (String line : files) {
+            Path path = Path.of(line);
+            if (Files.exists(path)) {
+                readSingleFile(path);
+            } else {
+                System.out.println("Ошибка! файла не существует"); //Todo: заменить на exception
+            }
+        }
+        // TODO: если включена статистика (shortStats или fullStats) вызвать calculateStats()
 
         // TODO: создать и реализовать calculateStats()
 
 
-        Path file;
+    }
+
+    private void readSingleFile(Path filePath) {
+        //TODO commit после реализации метода
+        try (Scanner scanner = new Scanner(filePath.toFile())) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                DataType type = detectType(line);
+                switch (type) {
+                    case INTEGER -> integers.add(line);
+                    case FLOAT -> floats.add(line);
+                    case STRING -> strings.add(line);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Файл не найден: " + e.getMessage()); // TODO: разложить для себя FileNotFoundException
+        }
 
     }
 
-    private boolean isInteger(String str) {
-        return false;
+    private DataType detectType(String line) {
+        String trimmed = line.trim();
+        try {
+            Long.parseLong(trimmed);
+            return DataType.INTEGER;
+        } catch (NumberFormatException exception1) {
+            try {
+                Double.parseDouble(trimmed);
+                return DataType.FLOAT;
+            } catch (NumberFormatException exception2) {
+                return DataType.STRING;
+            }
+        }
     }
-
-    private boolean isDouble(String str) {
-
-        return false;
-    }
-
 
 
 }
