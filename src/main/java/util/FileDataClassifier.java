@@ -69,5 +69,19 @@ public class FileDataClassifier {
         }
     }
 
+    public List<String> getIntegers() {
+        return integers;
+    }
 
+    public List<String> getFloats() {
+        return floats;
+    }
+
+    public List<String> getStrings() {
+        return strings;
+    }
+
+    public ParsedArguments getArguments() {
+        return arguments;
+    }
 }
