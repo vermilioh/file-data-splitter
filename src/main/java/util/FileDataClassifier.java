@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class FileDataClassifier {
-    List<String> integers = new ArrayList<>();
-    List<String> floats = new ArrayList<>();
-    List<String> strings = new ArrayList<>();
+    private List<String> integers = new ArrayList<>();
+    private List<String> floats = new ArrayList<>();
+    private List<String> strings = new ArrayList<>();
 
-    ParsedArguments arguments;
+    private  ParsedArguments arguments;
 
     public FileDataClassifier(ParsedArguments arguments) {
         this.arguments = arguments;
@@ -29,15 +29,12 @@ public class FileDataClassifier {
                 System.out.println("Ошибка! файла не существует"); //Todo: заменить на exception
             }
         }
-        // TODO: если включена статистика (shortStats или fullStats) вызвать calculateStats()
 
-        // TODO: создать и реализовать calculateStats()
 
 
     }
 
     private void readSingleFile(Path filePath) {
-        //TODO commit после реализации метода
         try (Scanner scanner = new Scanner(filePath.toFile())) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();

@@ -1,8 +1,5 @@
 package util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Main {
     public static void main(String[] args) {
         if (args.length == 0) {
@@ -13,7 +10,10 @@ public class Main {
             ParsedArguments parsed = parser.parse(args); // парсер раскидал CLI по полям parsed
             FileDataClassifier classifier = new FileDataClassifier(parsed);
             classifier.readInputFiles(); // читаем переданные файлы
-            // TODO: создать класс FileDataWriter, в который передаем 4 параметра
+            OutputFileWriter out = new OutputFileWriter(classifier.getArguments());
+            out.writeInt(classifier.getIntegers());
+            out.writeFloat(classifier.getFloats());
+            out.writeString(classifier.getStrings());
         }
     }
 }
