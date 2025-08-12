@@ -1,53 +1,57 @@
 package util;
 
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class OutputFileWriter implements AutoCloseable {
     private boolean mode;
-    private Path outputDir;
+    private Path outputPath;
     private String prefix;
 
-    public OutputFileWriter(ParsedArguments arguments){
+    public OutputFileWriter(ParsedArguments arguments) {
         String dir = arguments.getOutputPath();
-        this.outputDir = dir.isEmpty()? Path.of("") : Path.of(dir);
-        this.mode= arguments.isAppendToFile();
-        this.prefix= arguments.getPrefix().isEmpty()? "" : arguments.getPrefix();
+        this.outputPath = dir.isEmpty() ? Path.of(
+                "") : Path.of(dir);
+        this.mode = arguments.isAppendToFile();
+        this.prefix = arguments.getPrefix().isEmpty() ? "" : arguments.getPrefix();
     }
 
 
-    public void WriteAll(){
+    public void writeAll(List<String> integers, List<String> floats, List<String> strings) {
+
+        writeLines("sample-integers.txt", integers);
+        writeLines("sample-floats.txt", floats);
+        writeLines("sample-strings.txt", strings);
+    }
+
+    private void appendToFile() {
 
     }
 
-    public void writeInt(List<String> integers){
-        try (PrintWriter writer = new PrintWriter("sample-integers")){
-            for(String line : integers){
-                writer.println(line);
+    private void writeLines(String fileName, List<String> lines) {
+        if (lines == null || lines.isEmpty()) return;
+
+        String fullFileName = prefix.concat(fileName);
+        Path fullPath = outputPath.resolve(fullFileName);
+
+        try {
+            Path dir = fullPath.getParent();
+            if (dir != null) {
+                Files.createDirectories(dir);
             }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    public void writeFloat(List<String> floats){
-        try(PrintWriter writer = new PrintWriter("sample-floats")){
-            for(String line : floats ){
-                writer.println(line);
+            try (PrintWriter writer = new PrintWriter(new FileWriter(fullPath.toFile(), mode))) {
+                for (String line : lines) {
+                    writer.println(line);
+                }
             }
-        }catch (FileNotFoundException e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void writeString(List <String> strings){
-        try(PrintWriter writer = new PrintWriter("sample-strings.txt")){
-            for(String line: strings){
-                writer.println(line);
-            }
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

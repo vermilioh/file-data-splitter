@@ -19,7 +19,7 @@ public class FileDataClassifier {
     } // конструктор
 
     public void readInputFiles() {
-        List<String> files = arguments.getInputFiles(); // получили пути ко Всем записанным файлам
+        List<String> files = arguments.getInputFiles(); // получили пути ко Всем файлам из CLI(input)
 
         for (String line : files) {
             Path path = Path.of(line);

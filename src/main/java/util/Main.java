@@ -9,11 +9,10 @@ public class Main {
             ArgumentsParser parser = new ArgumentsParser();
             ParsedArguments parsed = parser.parse(args); // парсер раскидал CLI по полям parsed
             FileDataClassifier classifier = new FileDataClassifier(parsed);
-            classifier.readInputFiles(); // читаем переданные файлы
+            classifier.readInputFiles(); // читаем переданные пользователем файлы
             OutputFileWriter out = new OutputFileWriter(classifier.getArguments());
-            out.writeInt(classifier.getIntegers());
-            out.writeFloat(classifier.getFloats());
-            out.writeString(classifier.getStrings());
+            out.writeAll(classifier.getIntegers(), classifier.getFloats(),classifier.getStrings());
+
         }
     }
 }
