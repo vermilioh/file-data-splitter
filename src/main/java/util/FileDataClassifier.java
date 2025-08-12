@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,7 +13,7 @@ public class FileDataClassifier {
     private List<String> floats = new ArrayList<>();
     private List<String> strings = new ArrayList<>();
 
-    private  ParsedArguments arguments;
+    private ParsedArguments arguments;
 
     public FileDataClassifier(ParsedArguments arguments) {
         this.arguments = arguments;
@@ -29,9 +30,6 @@ public class FileDataClassifier {
                 System.out.println("Ошибка! файла не существует"); //Todo: заменить на exception
             }
         }
-
-
-
     }
 
     private void readSingleFile(Path filePath) {
@@ -64,6 +62,60 @@ public class FileDataClassifier {
                 return DataType.STRING;
             }
         }
+    }
+
+    public void printStats() {
+        if (arguments.isShortStats()) {
+            printShortStats();
+        }
+        if (arguments.isFullStats()) {
+            printFullStats();
+        }
+    }
+
+    private void printShortStats() {
+        System.out.println("Краткая статистика:");
+        System.out.println("Количество целых чисел: " + integers.size());
+        System.out.println("Количество вещественных чисел: " + floats.size());
+        System.out.println("Количество строк: " + strings.size());
+    }
+
+    private void printFullStats() {
+        System.out.println("Полная статистика:");
+
+        System.out.println("Количество целых чисел: " + integers.size());
+
+        List<Integer> numbers = integers.stream()
+                .map(Integer::parseInt)
+                .toList();
+        Integer min = Collections.min(numbers);
+        Integer max = Collections.max(numbers);
+
+        Integer sum = 0;
+        for (Integer n : numbers) {
+            sum += n;
+        }
+
+        float avg = (float) sum / numbers.size();
+
+        System.out.println("Минимальное значение: " + min);
+        System.out.println("Максимальное значение: " + max);
+        System.out.println("Сумма всех целых чисел: " + sum);
+        System.out.println("Среднее всех целых чисел: " + avg);
+
+        System.out.println();
+
+//        System.out.println("Количество вещественных чисел: " + floats.size());
+//        System.out.println("Минимальное значение: " + integers.size());
+//        System.out.println("Максимальное значение: " + integers.size());
+//        System.out.println("Сумма всех вещ. чисел: " + integers.size());
+//        System.out.println("Среднее всех вещ. чисел: " + integers.size());
+
+        System.out.println();
+
+        System.out.println("Количество строк: " + strings.size());
+        System.out.println("Размер самой короткой строки: " + strings.size());
+        System.out.println("Размер самой длинной строки: " + strings.size());
     }
 
     public List<String> getIntegers() {

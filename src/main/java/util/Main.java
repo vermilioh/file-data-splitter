@@ -10,6 +10,7 @@ public class Main {
             ParsedArguments parsed = parser.parse(args); // парсер раскидал CLI по полям parsed
             FileDataClassifier classifier = new FileDataClassifier(parsed);
             classifier.readInputFiles(); // читаем переданные пользователем файлы
+            classifier.printStats();
             OutputFileWriter out = new OutputFileWriter(classifier.getArguments());
             out.writeAll(classifier.getIntegers(), classifier.getFloats(),classifier.getStrings());
 

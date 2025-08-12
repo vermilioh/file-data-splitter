@@ -1,8 +1,10 @@
-123
-45.67
-679
-321
-Hello world
-42Hello world
-42.h
-Newline
+10
+20.5
+hello
+30
+5
+15.75
+world
+25
+42
+bye
