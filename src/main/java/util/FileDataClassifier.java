@@ -3,17 +3,14 @@ package util;
 import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class FileDataClassifier {
-    private List<String> integers = new ArrayList<>();
-    private List<String> floats = new ArrayList<>();
-    private List<String> strings = new ArrayList<>();
+    private final List<String> integers = new ArrayList<>();
+    private final List<String> floats = new ArrayList<>();
+    private final List<String> strings = new ArrayList<>();
 
-    private ParsedArguments arguments;
+    private final ParsedArguments arguments;
 
     public FileDataClassifier(ParsedArguments arguments) {
         this.arguments = arguments;
@@ -64,59 +61,64 @@ public class FileDataClassifier {
         }
     }
 
-    public void printStats() {
-        if (arguments.isShortStats()) {
-            printShortStats();
-        }
+    public void printStatsByFlags() {
         if (arguments.isFullStats()) {
             printFullStats();
         }
+        if (arguments.isShortStats()) {
+            printShortStats();
+        }
+
     }
 
     private void printShortStats() {
-        System.out.println("Краткая статистика:");
+        System.out.println("Краткая статистика");
         System.out.println("Количество целых чисел: " + integers.size());
         System.out.println("Количество вещественных чисел: " + floats.size());
         System.out.println("Количество строк: " + strings.size());
     }
 
-    private void printFullStats() {
-        System.out.println("Полная статистика:");
+    private void printIntStats() {
+        IntStats intStats = new IntStats();
+        intStats.calculateIntStats();
 
-        System.out.println("Количество целых чисел: " + integers.size());
-
-        List<Integer> numbers = integers.stream()
-                .map(Integer::parseInt)
-                .toList();
-        Integer min = Collections.min(numbers);
-        Integer max = Collections.max(numbers);
-
-        Integer sum = 0;
-        for (Integer n : numbers) {
-            sum += n;
-        }
-
-        float avg = (float) sum / numbers.size();
-
-        System.out.println("Минимальное значение: " + min);
-        System.out.println("Максимальное значение: " + max);
-        System.out.println("Сумма всех целых чисел: " + sum);
-        System.out.println("Среднее всех целых чисел: " + avg);
-
-        System.out.println();
-
-//        System.out.println("Количество вещественных чисел: " + floats.size());
-//        System.out.println("Минимальное значение: " + integers.size());
-//        System.out.println("Максимальное значение: " + integers.size());
-//        System.out.println("Сумма всех вещ. чисел: " + integers.size());
-//        System.out.println("Среднее всех вещ. чисел: " + integers.size());
-
-        System.out.println();
-
-        System.out.println("Количество строк: " + strings.size());
-        System.out.println("Размер самой короткой строки: " + strings.size());
-        System.out.println("Размер самой длинной строки: " + strings.size());
+        System.out.println("Всего целых чисел: " + intStats.count);
+        System.out.println("Минимальное значение: " + intStats.min);
+        System.out.println("Максимальное значение: " + intStats.max);
+        System.out.println("Сумма всех целых чисел: " + intStats.sum);
+        System.out.println("Среднее всех целых чисел: " + intStats.avg);
     }
+
+    private void printFloatStats() {
+        FloatStats floatStats = new FloatStats();
+        floatStats.calculateFloatStats();
+
+        System.out.println("Всего вещ. чисел: " + floatStats.count);
+        System.out.println("Минимальное значение: " + floatStats.min);
+        System.out.println("Максимальное значение: " + floatStats.max);
+        System.out.println("Сумма всех вещ. чисел: " + floatStats.sum);
+        System.out.println("Среднее всех вещ. чисел: " + floatStats.avg);
+    }
+
+    private void printStringStats() {
+        StringStats stringStats = new StringStats();
+        stringStats.calculateStringStats();
+
+        System.out.println("Количество строк: " + stringStats.count);
+        System.out.println("Размер самой короткой строки: " + stringStats.minLength);
+        System.out.println("Размер самой длинной строки: " + stringStats.maxLength);
+    }
+
+    private void printFullStats() {
+        System.out.println("Полная статистика");
+
+        printIntStats();
+        System.out.println();
+        printFloatStats();
+        System.out.println();
+        printStringStats();
+    }
+
 
     public List<String> getIntegers() {
         return integers;
@@ -132,5 +134,72 @@ public class FileDataClassifier {
 
     public ParsedArguments getArguments() {
         return arguments;
+    }
+
+    // ===== Вложенные классы для статистики =====
+    private class IntStats {
+        int count;
+        int min;
+        int max;
+        int sum;
+        double avg;
+
+        void calculateIntStats() {
+            min = Integer.parseInt(integers.getFirst());
+            max = min;
+            sum = 0;
+            count = integers.size();
+
+            for (String x : integers) {
+                int num = Integer.parseInt(x);
+                if (num > max) max = num;
+                if (num < min) min = num;
+                sum += num;
+            }
+            avg = (double) sum / count;
+        }
+    }
+
+    private class FloatStats {
+        int count;
+        double min;
+        double max;
+        double sum;
+        double avg;
+
+        void calculateFloatStats() {
+            min = Double.parseDouble(floats.getFirst());
+            max = min;
+            sum = 0.0;
+            count = floats.size();
+
+            for (String x : floats) {
+                double num = Double.parseDouble(x);
+                if (num > max) max = num;
+                if (num < min) min = num;
+                sum += num;
+            }
+            avg = sum / count;
+        }
+    }
+
+    private class StringStats {
+        int count = strings.size();
+        int minLength;
+        int maxLength;
+
+        void calculateStringStats() {
+            minLength = strings.getFirst().length();
+            maxLength = minLength;
+
+            for (String str : strings) {
+                int currentLength = str.length();
+                if (currentLength > maxLength) {
+                    maxLength = currentLength;
+                } else if (currentLength < minLength) {
+                    minLength = currentLength;
+                }
+            }
+        }
     }
 }
