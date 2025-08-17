@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ArgumentsParser {
 
-    public ParsedArguments parse(String[] args) {
+    public ParsedArguments parseFromCli(String[] args) {
 
         ParsedArguments parsedArguments = new ParsedArguments();
         List<String> inputFiles = new ArrayList<>();
@@ -25,32 +25,35 @@ public class ArgumentsParser {
                     break;
 
                 case "-o":
-                    if ((i + 1) >= args.length) {
-                        System.out.println("Error!: Укажите путь для сохранения файла");
+                    if ((i + 1) >= args.length) { // TODO: чета я блин забыла уже как это работает
+                        System.out.println("Отсутствует значение для -o, сохраню в текущую папку");
                     } else {
-                        parsedArguments.setOutputPath(args[++i]);
+                        if (!args[i + 1].startsWith("-")) {
+                            parsedArguments.setOutputPath(args[++i]);
+                        }
+
                     }
                     break;
 
                 case "-p":
-                    if ((i + 1) >= args.length) {
-                        System.out.println("Error!: Укажите префикс");
+                    if ((i + 1) >= args.length) { // TODO: чета я блин забыла уже как это работает
+                        System.out.println("Отсутствует значение для опции -p, в названии не будет префикса");
                     } else {
-                        parsedArguments.setPrefix(args[++i]);
+                        if (!args[i + 1].startsWith("-")) {
+                            parsedArguments.setPrefix(args[++i]);
+                        }
                     }
                     break;
 
                 default:
                     if (args[i].startsWith("-")) {
-                        System.out.println("Ошибка: опции " + args[i] + " не существует");
-                        // TODO: возможно, стоит выбросить исключение или завершить программу?
+                        System.err.println("Ошибка: опции " + args[i] + " не существует");
                     } else {
                         inputFiles.add(args[i]);
                     }
-
             }
         }
-        parsedArguments.setInputFiles(inputFiles);
+        parsedArguments.setInputFilesPaths(inputFiles);
         return parsedArguments;
     }
 

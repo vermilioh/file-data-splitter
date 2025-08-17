@@ -1,11 +1,10 @@
 package util;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ParsedArguments {
-    private List<String> inputFiles = new ArrayList<>();
+    private List<String> inputFilesPaths = new ArrayList<>();
 
     private boolean appendToFile;
     private boolean shortStats;
@@ -15,15 +14,6 @@ public class ParsedArguments {
     private String prefix = "";
 
 
-//    public void printParsedArguments(){
-//        System.out.println(appendToFile);
-//        System.out.println(shortStats);
-//        System.out.println(fullStats);
-//
-//        for (String inputFile : inputFiles) {
-//            System.out.println(inputFile);
-//        }
-//    }
 
     public boolean isAppendToFile() {
         return appendToFile;
@@ -33,12 +23,12 @@ public class ParsedArguments {
         this.appendToFile = appendToFile;
     }
 
-    public void setInputFiles(List<String> inputFiles) {
-        this.inputFiles = inputFiles;
+    public void setInputFilesPaths(List<String> inputFilesPaths) {
+        this.inputFilesPaths = inputFilesPaths;
     }
 
-    public List<String> getInputFiles() {
-        return inputFiles;
+    public List<String> getInputFilesPaths() {
+        return inputFilesPaths;
     }
 
 

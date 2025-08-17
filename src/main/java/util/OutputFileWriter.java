@@ -15,7 +15,7 @@ public class OutputFileWriter implements AutoCloseable {
 
     public OutputFileWriter(ParsedArguments arguments) {
         String dir = arguments.getOutputPath();
-        this.outputPath = dir.isEmpty() ? Path.of("") : Path.of(dir);
+        this.outputPath = (dir.isEmpty()) ? Path.of("") : Path.of(dir);
         this.mode = arguments.isAppendToFile();
         this.prefix = arguments.getPrefix().isEmpty() ? "" : arguments.getPrefix();
     }
@@ -25,6 +25,11 @@ public class OutputFileWriter implements AutoCloseable {
         writeLines("integers.txt", integers);
         writeLines("floats.txt", floats);
         writeLines("strings.txt", strings);
+
+        if(!integers.isEmpty() || !floats.isEmpty() || !strings.isEmpty() ){
+            System.out.println("\nСоздаю файлы...");
+            System.out.println("Найдёте их в текущей папке или по заданному пути");
+        }
     }
 
 
@@ -39,7 +44,6 @@ public class OutputFileWriter implements AutoCloseable {
             if (dir != null) {
                 Files.createDirectories(dir);
             }
-
             try (PrintWriter writer = new PrintWriter(new FileWriter(fullPath.toFile(), mode))) {
                 for (String line : lines) {
                     writer.println(line);

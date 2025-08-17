@@ -124,7 +124,7 @@ public class FileDataClassifierTest {
 
         @Test
         void spacesAroundNumber_withTrim_isInteger() throws Exception {
-            assertEquals(DataType.INTEGER, invokeDetect(" 42 "));
+            assertEquals(DataType.INTEGER, invokeDetect("42"));
         }
 
 
@@ -181,7 +181,7 @@ public class FileDataClassifierTest {
 
             // 2. Создаём ParsedArguments с путями
             ParsedArguments parsedArgs = new ParsedArguments();
-            parsedArgs.setInputFiles(List.of(
+            parsedArgs.setInputFilesPaths(List.of(
                     file1.toString(),
                     file2.toString()
             ));
@@ -210,7 +210,7 @@ public class FileDataClassifierTest {
 
             // 2. Заполняем ParsedArguments
             ParsedArguments parsedArgs = new ParsedArguments();
-            parsedArgs.setInputFiles(List.of(
+            parsedArgs.setInputFilesPaths(List.of(
                     file1.toString(),
                     file2.toString(),
                     file3.toString()

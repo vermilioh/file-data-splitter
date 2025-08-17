@@ -1,17 +1,13 @@
 package util;
 
-import java.util.ArrayList;
-
 
 public class Main {
     public static void main(String[] args) {
 
         if (args.length == 0) {
-            System.out.println("нет входных файлов");
-            //TODO: в дальнейшем обработать как исключение?
+            System.err.println("Нет файлов для обработки. Завершаюсь...");
         } else {
-            ArgumentsParser parser = new ArgumentsParser();
-            ParsedArguments parsed = parser.parse(args);// парсер раскидал CLI по полям parsed
+            ParsedArguments parsed = new ArgumentsParser().parseFromCli(args);
 
             FileDataClassifier classifier = new FileDataClassifier(parsed);
             classifier.readInputFiles(); // читаем переданные пользователем файлы

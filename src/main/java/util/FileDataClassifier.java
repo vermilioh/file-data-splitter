@@ -17,14 +17,14 @@ public class FileDataClassifier {
     } // конструктор
 
     public void readInputFiles() {
-        List<String> files = arguments.getInputFiles(); // получили пути ко Всем файлам из CLI(input)
+        List<String> files = arguments.getInputFilesPaths(); // получили пути ко Всем файлам из CLI(input)
 
         for (String line : files) {
             Path path = Path.of(line);
             if (Files.exists(path)) {
                 readSingleFile(path);
             } else {
-                System.out.println("Ошибка! файла не существует"); //Todo: заменить на exception
+                System.err.println("Ошибка! файла " + path + " не существует");
             }
         }
     }
@@ -32,7 +32,8 @@ public class FileDataClassifier {
     private void readSingleFile(Path filePath) {
         try (Scanner scanner = new Scanner(filePath.toFile())) {
             while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
+                String line = scanner.nextLine().trim();
+                if (line.isBlank()) continue;
                 DataType type = detectType(line);
                 switch (type) {
                     case INTEGER -> integers.add(line);
@@ -47,13 +48,13 @@ public class FileDataClassifier {
     }
 
     private DataType detectType(String line) {
-        String trimmed = line.trim();
+
         try {
-            Long.parseLong(trimmed);
+            Long.parseLong(line);
             return DataType.INTEGER;
         } catch (NumberFormatException exception1) {
             try {
-                Double.parseDouble(trimmed);
+                Double.parseDouble(line);
                 return DataType.FLOAT;
             } catch (NumberFormatException exception2) {
                 return DataType.STRING;
@@ -62,6 +63,11 @@ public class FileDataClassifier {
     }
 
     public void printStatsByFlags() {
+
+        if (integers.isEmpty() && floats.isEmpty() && strings.isEmpty()) {
+            System.err.println("Нет данных для статистики");
+            return;
+        }
         if (arguments.isFullStats()) {
             printFullStats();
         }
@@ -78,6 +84,31 @@ public class FileDataClassifier {
         System.out.println("Количество строк: " + strings.size());
     }
 
+    private void printFullStats() {
+        System.out.println("Полная статистика\n");
+
+        if (!integers.isEmpty()) {
+            printIntStats();
+            System.out.println();
+        } else {
+            System.out.println("Количество целых чисел: 0\n");
+        }
+
+        if (!floats.isEmpty()) {
+            printFloatStats();
+            System.out.println();
+        } else {
+            System.out.println("Количество вещественных чисел: 0\n");
+        }
+
+        if (!strings.isEmpty()) {
+            printStringStats();
+        } else {
+            System.out.println("Количество строк: 0\n");
+        }
+
+    }
+
     private void printIntStats() {
         IntStats intStats = new IntStats();
         intStats.calculateIntStats();
@@ -87,6 +118,7 @@ public class FileDataClassifier {
         System.out.println("Максимальное значение: " + intStats.max);
         System.out.println("Сумма всех целых чисел: " + intStats.sum);
         System.out.println("Среднее всех целых чисел: " + intStats.avg);
+
     }
 
     private void printFloatStats() {
@@ -104,19 +136,9 @@ public class FileDataClassifier {
         StringStats stringStats = new StringStats();
         stringStats.calculateStringStats();
 
-        System.out.println("Количество строк: " + stringStats.count);
+        System.out.println("Всего строк: " + stringStats.count);
         System.out.println("Размер самой короткой строки: " + stringStats.minLength);
         System.out.println("Размер самой длинной строки: " + stringStats.maxLength);
-    }
-
-    private void printFullStats() {
-        System.out.println("Полная статистика");
-
-        printIntStats();
-        System.out.println();
-        printFloatStats();
-        System.out.println();
-        printStringStats();
     }
 
 
@@ -139,19 +161,18 @@ public class FileDataClassifier {
     // ===== Вложенные классы для статистики =====
     private class IntStats {
         int count;
-        int min;
-        int max;
-        int sum;
+        long min;
+        long max;
+        long sum;
         double avg;
 
         void calculateIntStats() {
-            min = Integer.parseInt(integers.getFirst());
+            min = Long.parseLong(integers.getFirst());
             max = min;
-            sum = 0;
             count = integers.size();
 
             for (String x : integers) {
-                int num = Integer.parseInt(x);
+                long num = Long.parseLong(x);
                 if (num > max) max = num;
                 if (num < min) min = num;
                 sum += num;
