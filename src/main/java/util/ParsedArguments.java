@@ -14,7 +14,6 @@ public class ParsedArguments {
     private String prefix = "";
 
 
-
     public boolean isAppendToFile() {
         return appendToFile;
     }
@@ -30,7 +29,6 @@ public class ParsedArguments {
     public List<String> getInputFilesPaths() {
         return inputFilesPaths;
     }
-
 
     public boolean isShortStats() {
         return shortStats;

@@ -14,10 +14,10 @@ public class FileDataClassifier {
 
     public FileDataClassifier(ParsedArguments arguments) {
         this.arguments = arguments;
-    } // конструктор
+    }
 
     public void readInputFiles() {
-        List<String> files = arguments.getInputFilesPaths(); // получили пути ко Всем файлам из CLI(input)
+        List<String> files = arguments.getInputFilesPaths();
 
         for (String line : files) {
             Path path = Path.of(line);
@@ -42,7 +42,7 @@ public class FileDataClassifier {
                 }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Файл не найден: " + e.getMessage()); // TODO: разложить для себя FileNotFoundException
+            System.err.println("Файл не найден: " + filePath + e.getMessage());
         }
 
     }
@@ -63,7 +63,6 @@ public class FileDataClassifier {
     }
 
     public void printStatsByFlags() {
-
         if (integers.isEmpty() && floats.isEmpty() && strings.isEmpty()) {
             System.err.println("Нет данных для статистики");
             return;
@@ -158,7 +157,6 @@ public class FileDataClassifier {
         return arguments;
     }
 
-    // ===== Вложенные классы для статистики =====
     private class IntStats {
         int count;
         long min;

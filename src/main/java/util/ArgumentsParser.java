@@ -1,5 +1,7 @@
 package util;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,23 +27,18 @@ public class ArgumentsParser {
                     break;
 
                 case "-o":
-                    if ((i + 1) >= args.length) { // TODO: чета я блин забыла уже как это работает
-                        System.out.println("Отсутствует значение для -o, сохраню в текущую папку");
+                    if (isNextInvalid(args, i)) {
+                        System.out.println("Отсутствует значение для -o, сохраню файлы в текущую папку");
                     } else {
-                        if (!args[i + 1].startsWith("-")) {
-                            parsedArguments.setOutputPath(args[++i]);
-                        }
-
+                        parsedArguments.setOutputPath(args[++i]);
                     }
                     break;
 
                 case "-p":
-                    if ((i + 1) >= args.length) { // TODO: чета я блин забыла уже как это работает
-                        System.out.println("Отсутствует значение для опции -p, в названии не будет префикса");
+                    if (isNextInvalid(args, i)) {
+                        System.out.println("Отсутствует значение для -p, в названии не будет префикса");
                     } else {
-                        if (!args[i + 1].startsWith("-")) {
-                            parsedArguments.setPrefix(args[++i]);
-                        }
+                        parsedArguments.setPrefix(args[++i]);
                     }
                     break;
 
@@ -55,6 +52,14 @@ public class ArgumentsParser {
         }
         parsedArguments.setInputFilesPaths(inputFiles);
         return parsedArguments;
+    }
+
+    private boolean isNextInvalid(String[] args, int i) {
+        if (i + 1 >= args.length || args[i + 1].startsWith("-")) {
+            return true;
+        }
+        Path path = Path.of(args[i + 1]);
+        return Files.exists(path) && !Files.isDirectory(path);
     }
 
 }

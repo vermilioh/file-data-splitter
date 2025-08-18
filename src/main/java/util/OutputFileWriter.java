@@ -1,6 +1,5 @@
 package util;
 
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,7 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public class OutputFileWriter implements AutoCloseable {
+public class OutputFileWriter {
     private final boolean mode;
     private final Path outputPath;
     private final String prefix;
@@ -26,7 +25,7 @@ public class OutputFileWriter implements AutoCloseable {
         writeLines("floats.txt", floats);
         writeLines("strings.txt", strings);
 
-        if(!integers.isEmpty() || !floats.isEmpty() || !strings.isEmpty() ){
+        if (!integers.isEmpty() || !floats.isEmpty() || !strings.isEmpty()) {
             System.out.println("\nСоздаю файлы...");
             System.out.println("Найдёте их в текущей папке или по заданному пути");
         }
@@ -50,12 +49,7 @@ public class OutputFileWriter implements AutoCloseable {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Не удалось записать …: " + e.getMessage());
         }
-    }
-
-    @Override
-    public void close() throws Exception {
-
     }
 }
